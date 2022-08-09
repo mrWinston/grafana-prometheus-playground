@@ -4,8 +4,8 @@ global:
   # scrape_timeout is set to the global default (10s).
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
-#rule_files:
-# - "recording-rules.yml"
+rule_files:
+ - "rules.yml"
 
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.

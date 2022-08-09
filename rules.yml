@@ -1,0 +1,18 @@
+groups:
+  - name: example
+    rules:
+      - record: "job:successful_requests:rate5m"
+        expr: rate(requests_total{code!~"^5.+"}[5m])
+      - record: "job:requests:rate5m"
+        expr: rate(requests_total[5m])
+      - record: "job:successful_requests_per_requests:ratio_rate5m"
+        expr: |
+          sum(job:successful_requests:rate5m)
+          /
+          sum(job:requests:rate5m)
+      - alert: "request_duration_over_10s"
+        expr: |
+          sum(rate(request_duration_bucket{le="+Inf"}[1m])) 
+          > 
+          sum (rate(request_duration_bucket{le="10.0"}[1m]))
+        for: 1s

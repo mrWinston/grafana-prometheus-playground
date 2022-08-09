@@ -1,11 +1,20 @@
 ---
 config:
-  - name: oauth_server_requests_total
-    description: oauth requests
+  - name: request_duration
+    description: Request Duration Histogram
+    type: histogram
+    sequence:
+      - eval_time: 1
+        interval: 1
+        values: 1.0-10.1
+        operation: inc
+  - name: requests_total
+    description: requests counter
     type: counter
     labels:
       - container
       - code
+      - instance
     sequence:
       - eval_time: 1
         values: 1-50
@@ -13,9 +22,25 @@ config:
         labels:
           container: oauth-server
           code: 500
+          instance: stage
       - eval_time: 1
         values: 2000-5000
         operation: inc
         labels:
           container: oauth-server
           code: 200
+          instance: stage
+      - eval_time: 1
+        values: 5-40
+        operation: inc
+        labels:
+          container: oauth-server
+          code: 500
+          instance: prod
+      - eval_time: 1
+        values: 1500-6500
+        operation: inc
+        labels:
+          container: oauth-server
+          code: 200
+          instance: prod
