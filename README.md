@@ -63,6 +63,15 @@ Alternatively, issue an HTTP-Get request on the command line using curl:
 curl http://localhost:9000/-/reload
 ```
 
+## Running tests
+
+The stack now supports running the prometheus unit tests. Make sure [test.yml](./test.yml) contains your [prometheus unit test definitions](https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules/), then run:
+
+```
+make tests
+```
+to run the unit tests.
+
 ## Overview
 
 Here is a birds eye view of the docker-compose stack that is set up:

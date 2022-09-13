@@ -1,0 +1,39 @@
+# This is the main input for unit testing.
+# Only this file is passed as command line argument.
+
+rule_files:
+  - rules.yml
+
+evaluation_interval: 10m
+
+tests:
+  # Test 1.
+  - interval: 5m
+    # Series data.
+    input_series:
+      - series: requests_total{code="200"}
+        values: 0+20x10 200+15x10
+      - series: requests_total{code="500"}
+        values: 0+0x10 0+5x10
+    #      - series: 'up{job="prometheus", instance="localhost:9090"}'
+    #        values: '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0'
+    #      - series: 'up{job="node_exporter", instance="localhost:9100"}'
+    #        values: '1+0x6 0 0 0 0 0 0 0 0' # 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0
+    #      - series: 'go_goroutines{job="prometheus", instance="localhost:9090"}'
+    #        values: '10+10x2 30+20x5' # 10 20 30 30 50 70 90 110 130
+    #      - series: 'go_goroutines{job="node_exporter", instance="localhost:9100"}'
+    #        values: '10+10x7 10+30x4' # 10 20 30 40 50 60 70 80 10 40 70 100 130
+
+    # Unit test for alerting rules.
+    alert_rule_test:
+        # check alert not firing
+      - eval_time: 20m
+        alertname: testalert
+        exp_alerts:
+
+      - eval_time: 70m
+        alertname: testalert
+        exp_alerts:
+          - exp_annotations:
+              summary: "FailingRequests"
+              message: "Too many requests aren't successful. currently only 75% are."

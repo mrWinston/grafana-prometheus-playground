@@ -10,9 +10,13 @@ groups:
           sum(job:successful_requests:rate5m)
           /
           sum(job:requests:rate5m)
-      - alert: "request_duration_over_10s"
+      - alert: testalert
         expr: |
-          sum(rate(request_duration_bucket{le="+Inf"}[1m])) 
-          > 
-          sum (rate(request_duration_bucket{le="10.0"}[1m]))
-        for: 1s
+          sum(rate(requests_total{code!~"^5.+"}[5m]))
+          /
+          sum(rate(requests_total[5m]))
+          <= 0.9
+        for: 5m
+        annotations:
+          summary: "FailingRequests"
+          message: "Too many requests aren't successful. currently only {{ $value | humanizePercentage }} are."
